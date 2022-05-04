@@ -26,6 +26,7 @@ class CIV:
 - Bluetooth-name of the ESP-device
 
     civ.setupp (true) ;    		  // take the pre defined BT name "CIV_BT_IFC"
+    
     civ.setupp (true, "myBTdeviceName");  // new is the possibility of setting your individual BT-name at startup
 
 - on processors with a lot of RAM (Atmega 2560 or ESP32) the size of various buffers has been increased
@@ -33,8 +34,8 @@ class CIV:
 
 class ICradio:
 
-- ICradio supports now also the readout of the Modulation Mode (USB, LSB, CW etc.) in addition
-	( functions  .getModMode() and .getRxFilter() )
+- ICradio supports now also the readout of the Modulation Mode (USB, LSB, CW etc.) in addition.
+   ( functions  .getModMode() and .getRxFilter() )
 
 - setting time and date of the radio
 	- ICradio doesn't need the global variables G_time, G_date and G_UTCdelta(to be defined in the main program) any more
