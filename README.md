@@ -24,7 +24,7 @@ class CIV:
   and easier to understand.
 
 - Bluetooth - name of the ESP - device
-	civ.setupp (true) ;                		// take the pre defined BT name "CIV_BT_IFC"
+  civ.setupp (true) ;    		// take the pre defined BT name "CIV_BT_IFC"
   civ.setupp (true, "myBTdeviceName"); 	// new is the possibility of setting your individual BT-name at startup
 
 - on processors with a lot of RAM (Atmega 2560 or ESP32) the size of various buffers has been increased
