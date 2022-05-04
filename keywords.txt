@@ -1,0 +1,55 @@
+#######################################
+# Syntax Coloring Map CIVbusLib
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+CIVresult_t	KEYWORD1
+retVal_t	KEYWORD1
+radioType_t	KEYWORD1
+radioOnOff_t	KEYWORD1
+radioMode_t	KEYWORD1
+radioModMode_t	KEYWORD1
+radioFilter_t	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+readMsgRaw	KEYWORD2
+readMsg	KEYWORD2
+writeMsg	KEYWORD2
+setupp	KEYWORD2
+loopp	KEYWORD2
+getNewMsg	KEYWORD2
+getAvailability	KEYWORD2
+setDCPower	KEYWORD2
+getMode	KEYWORD2
+setMode	KEYWORD2
+getFrequency	KEYWORD2
+getModMode	KEYWORD2
+getRxFilter	KEYWORD2
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+civ	KEYWORD2
+civmaster	KEYWORD2
+IC7100	KEYWORD2
+IC7300	KEYWORD2
+IC9700	KEYWORD2
+IC705	KEYWORD2
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+CIV_ADDR_7100	LITERAL1
+CIV_ADDR_7300	LITERAL1
+CIV_ADDR_9700	LITERAL1
+CIV_ADDR_705	LITERAL1
+

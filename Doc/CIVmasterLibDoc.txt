@@ -1,0 +1,137 @@
+CIVmasterLib - a Library for communication via ICOM's CI-V bus
+Created by Wilfried Dilling, DK8RW, May 04, 2022
+Released into the public domain
+
+
+Basics (SW / HW / Radio settings)
+
+This is the implementation of a part of ICOM's CIV-Bus protocol as far as it's needed
+for the current tasks (e.g. sending some commands to an ICOM radio when changing modes
+from digital to analog), reading the frequency, modulation mode/filter or switching the radio on or off.
+
+The command set, however, can be easily adapted/enhanced by anybody in the file 
+CIVcmds.h according to ICOM's user manual(s).
+But please be careful - if the FW Version in a specific radio is not up to date, commands
+may be described in the user manual which in reality are not accepted by the radio !
+
+The SW CIVmaster and ICradio is intended to be run as a "CI-V MASTER" on Arduino boards (incl. ESp32).
+
+The baudrate has to be set in the radio's menu to the CIV_BAUDRATE as defined in CIVmaster.h 
+Default in the Radio would be "Auto", which doesn't work reliably.
+
+The CI-V HW interface connects to a serial port (RX/TX) of the arduino.
+With Arduino Mega RX1/TX1 and with ESP32 RX2/TX2 pins are used automatically.
+If no independent HW serial port is available (e.g. in Arduino UNO, NANO, PRO, PRO MINI) 
+a SW-Emulation "AltSoftSerial" is used (Arduino Pins 8 and 9).
+The new ICOM radio IC-705 does not provide an HW CI-V interface any more. However, the SW / command structure
+of the CI-V-interface is implemented and easily accessible via BluetoothSerial (classic).
+For accessing this Bluetooth interface you have to use an ESP32 and tell the library to use Bluetooth instead of 
+the Serial 2 interface(default). This is done by passing "true" to the setupp-method of the class CIV.
+
+"Asynchronous reading", i.e. "CI-V broadcast messages" sent by the radio :
+
+This feature can be switched on or off in the menu of the ICOM transceivers.
+("CI-V Transceive" in the radio's menu, which is ON by default)
+
+Support of "Asynchronous reading" is supported. If the method readMsg is called cyclic
+in the main loop (approx. every 20 .. 100ms) the messages sent from the radio will be 
+gathered, checked and made available for interpretation.
+If ICradio is used in combination with civ, this will be supported automatically 
+by the ICradio-class.
+
+
+SW to be run on a CI-V master controlling ICOM radios
+
+	a.  CIV (CIV can be used standalone, i.e. independently from ICradio)
+
+			These are the low level drivers (read and write) for the CI-V interface.
+			They can be used independently from ICradio for any purpose possible
+			depending on the implementation in the different ICOM radios
+			
+			The CIV class is very universal by principle !!
+
+	b.	ICradio (ICradio needs, i.e. builds up on CIV)
+			This is the implementation of some high level features of the radios
+			like "switch the radio on or off" or "get the frequency in use".
+			Creating an instance based on the ICradio class sets the CI-V address and
+			the ICradio_type in use.
+
+			The instance "knows" the specialities of the different types of radio and
+			handles them automatically correct based on "_radioType". 
+
+			One of these "specialities" is e.g. the clock setting in IC7300.
+			The clock of the IC7300 will be set every time after the radio is switched on 
+			(since at least my IC7300 looses the time information every time, when it is
+			switched off).
+			
+			ICradio can be used very convenientely as long as the implemented feature set is sufficient
+			for the needs of the user. If not, the CIV class has to be used in addition (in parallel)
+			or instead of the ICradio class. 
+
+
+Implementation details (CIV)
+
+write to CIV bus (writeMsg):
+
+1. check, whether the bus is clear
+
+  At the moment, when the bus shall be taken over in order to write a message,
+	several states of the bus are possible: 
+
+	a. no bytes in rxbuffer; this is the normal case and ideal! The bus 
+		 is clear and the master can immediately take over the bus by
+     transmitting the start byte.
+
+	b. there are bytes received and stored in the rxBuffer. In this case it will
+		 try to read the complete command and store it away.
+
+	If there is no change of the situation after that (i.e. there are still 
+	bytes available in inbuffer) the transmission will be stopped and an error thrown
+
+2. build the buffer and transmit the bytes 
+   (only into buffer of the serial interface -> fast, approx. 60us in total, 
+   tested with AltSoftSerial on Arduino UNO)
+
+3. wait for end of transmission and check success of this transmission
+   In this part, the processor has to wait until the cmd has really been sent.
+   Then the transmitted byes are checked if one or more have been corrupted 
+   by a bus conflict.
+   This takes approx. 5ms for 19200Bd / 11 bytes
+
+Depending on the requirements, part 3 may be omitted in order to save time. 
+
+Regarding waiting times...
+  Given a speed of 19200Bd and 10Bits/byte the transmission of a 
+  byte takes 0,52ms. If a command consists of approx 8 bytes in the average, 
+  a complete CIV command takes approx 4,1ms
+  therefore a waiting time of 5ms seems to be reasonable ...
+
+
+read from CIV bus (readMsgRaw and readMsg):
+
+	read routine (readMsgRaw):
+		Check, whether there are Bytes in the inbuffer - if not, then return asap.
+		This takes only 10us !
+	
+		If bytes are available, the processing of the incoming message can start. 
+		However, usually processing the data (storing in rxBuffer) is much 
+		faster than the delivery of the bytes via the bus.
+		Therefore the rx procedure has to take care of the fact, that the incoming data 
+		stream may pause a bit and shall continue, until the C_stop byte 
+		signals the "command complete".
+		This must not take forever, so after a defined maximum waiting time (t_readMsg) the procedure 
+		has to stop and break, signaling an error.
+
+	read routine (readMsg):
+
+		readMsg is building up on readMsgRaw
+
+		In a system with more than one radio objects on the SW side (e.g. two instances of ICradio 
+		like IC7300 and IC9700) and two corresponding radios connected to the CI-V bus on the HW side,
+		it could happen that instance one (IC7300) is trying to read from the bus, but there is only a message for the
+		instance two (IC9700) available.
+		In this case the message for IC9700 has to be stored temporarily, and the result given back
+		to IC7300 is "no message available".
+		In case of "buffer full" no incoming message is fetched from the CI-V bus until the buffer 
+		has been read out.
+

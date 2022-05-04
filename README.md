@@ -1,8 +1,4 @@
-# CIVmasterLib
-Successor of CIVbusLib
-!! please delete CIVbusLib in the Library section of Arduino on your PC before copying CIVmasterLib into that place instead. !!
-
-
+### CIVmasterLib
 Arduino library for accessing ICOM's Amateur Radios via ICOM CI-V Bus 
 ("onewire" bus or via Bluetooth for the IC-705).
 
@@ -14,7 +10,7 @@ Date: 04-05-2022
 
 IMPORTANT: 
 I have kept the functions of the CIVmasterLib compatible to the CIVbusLib as much as possible!
-So, in theory, it should be possible to delete CIVbusLib and install CIVmasterLIB without change in your user programs.
+So, in theory, it should be possible to delete CIVbusLib and install CIVmasterLIB without change in your user programs
 They should simply compile and work as before!
 
 Exceptions : When you are using the time set function and the CIV client SW (see below).
@@ -31,7 +27,7 @@ class CIV:
 	civ.setupp (true) ;                		// take the pre defined BT name "CIV_BT_IFC"
   civ.setupp (true, "myBTdeviceName"); 	// new is the possibility of setting your individual BT-name at startup
 
-- on processors with a lot of RAM (Atmega 2560 or ESP32), the size of various buffers has been increased
+- on processors with a lot of RAM (Atmega 2560 or ESP32) the size of various buffers has been increased
 
 
 class ICradio:
@@ -99,7 +95,7 @@ The SW library can be used in two different ways:
 	2. use of the class "ICradio" in addition to "CIV" (include CIVmaster.h and ICradio.h). In this case you have access 
 		 to a limited set of higher level controls of the radios which I found to be useful.
 
-	A SUBSET of commands as required for the CIV master regarding ICOM's radios is stored in CIVcmds.h
+	A SUBSET of commands as required for the master regarding ICOM's radios is stored in CIVcmds.h
 	This can be extended by the user e.g. in own header files of the main program.
 
 ### Notes:
