@@ -10,7 +10,7 @@ Date: 05-05-2022
 
 IMPORTANT: 
 I have kept the functions of the CIVmasterLib compatible to the CIVbusLib as much as possible!
-So, in theory, it should be possible to delete CIVbusLib and install CIVmasterLIB without change in your user programs
+So, in theory (this has been tested as well, of course), it should be possible to delete CIVbusLib and install CIVmasterLIB without change in your user programs.
 They should simply compile and work as before!
 
 Exceptions : When you are using the time set function and the CIV client SW (see below).
