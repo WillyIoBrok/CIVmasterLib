@@ -4,9 +4,9 @@ Arduino library for accessing ICOM's Amateur Radios via ICOM CI-V Bus
 
 CIVmasterLib is the successor of CIVbusLib, but doesn't contain the part of the CIVclientLib any more!
 
-Version: 1.00
+Version: 1.01
 
-Date: 04-05-2022
+Date: 05-05-2022
 
 IMPORTANT: 
 I have kept the functions of the CIVmasterLib compatible to the CIVbusLib as much as possible!
@@ -30,6 +30,8 @@ class CIV:
     civ.setupp (true, "myBTdeviceName");  // new is the possibility of setting your individual BT-name at startup
 
 - on processors with a lot of RAM (Atmega 2560 or ESP32) the size of various buffers has been increased
+
+- command "CIV_C_TX" added in CIVcmds.h
 
 
 class ICradio:
