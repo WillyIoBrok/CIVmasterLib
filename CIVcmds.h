@@ -1,6 +1,6 @@
 /* 
 	CIVcmds.h - Library for communication via ICOM's CI-V bus
-	Created by Wilfried Dilling, DK8RW, Mai 04, 2022
+	Created by Wilfried Dilling, DK8RW, Mai 05, 2022
 	Released into the public domain
 	
 	Definition of ICOM command set (only sub set as required!)
@@ -24,6 +24,7 @@ constexpr uint8_t CIV_C_TRX_ON_OFF[]  = {1,0x18};                 // switch radi
 
 constexpr uint8_t CIV_C_TRX_ID[]      = {2,0x19,0x00};            // ID query
 
+constexpr uint8_t CIV_C_TX[]    			= {2,0x1C,0x00};            // query of TX-State 00=OFF, 01=ON
 
 // the following three commands don't fit for IC7100 !!!
 constexpr uint8_t CIV_C_DATE[]        = {4,0x1A,0x05,0x00,0x94};  // + 0x20 0x20 0x04 0x27 for 27.4.2020
