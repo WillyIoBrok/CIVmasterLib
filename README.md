@@ -64,7 +64,9 @@ class ICradio:
 
 general:
 
-- examples have been renamed and reworked in general. There are also new examples for the combination IC705 + ESP32 added
+- examples have been renamed and reworked in general. There are also new examples for the combination IC705 + ESP32 added.
+- Most of the examples will NOT run on Arduino UNO, Nano etc. any more. The reason is lack of memory (2k is not very much ...).
+The biggest reason for the memory consumption of the examples is the bigger number of "Serial.print(...)" in the examples in order to improve the usability. The library itself is not using much more memory! Another reason for not working on those small processors is - of course - the missing Bluetooth functionality of the Atmel chips.
 
 - the Serial Monitor baudrate in the Examples has been changed from 19200Bd -> 115200Bd 
 	(faster output of the messages and less interference with the BT channel)
